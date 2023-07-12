@@ -116,6 +116,40 @@ class ImageGallerySaverPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
+    private fun getRealPathFromURI(context: Context, contentUri: Uri?): String? {
+        if (contentUri == null) {
+            return null
+        }
+        val uri = contentUri.toString()
+        val split = uri.split(":")
+        val id = split[1].split("/")[1]
+
+        val column = MediaStore.Images.Media.DATA
+        val projection = arrayOf(column)
+
+        val selection = MediaStore.Images.Media._ID + "=?"
+        val selectionArgs = arrayOf(id)
+
+        val cursor = context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            null
+        )
+
+        var path: String? = null
+        if (cursor != null) {
+            val columnIndex = cursor.getColumnIndex(column)
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(columnIndex)
+            }
+            cursor.close()
+        }
+
+        return path
+    }
+
     /**
      * get file Mime Type
      *
@@ -178,7 +212,8 @@ class ImageGallerySaverPlugin : FlutterPlugin, MethodCallHandler {
         }
         return if (success) {
             sendBroadcast(context, fileUri)
-            SaveResultModel(fileUri.toString().isNotEmpty(), fileUri.toString(), null).toHashMap()
+            val path = getRealPathFromURI(context, fileUri)
+            SaveResultModel(!path.isNullOrBlank(), path, null).toHashMap()
         } else {
             SaveResultModel(false, null, "saveImageToGallery fail").toHashMap()
         }
@@ -226,7 +261,8 @@ class ImageGallerySaverPlugin : FlutterPlugin, MethodCallHandler {
         }
         return if (success) {
             sendBroadcast(context, fileUri)
-            SaveResultModel(fileUri.toString().isNotEmpty(), fileUri.toString(), null).toHashMap()
+            val path = getRealPathFromURI(context, fileUri)
+            SaveResultModel(!path.isNullOrBlank(), path, null).toHashMap()
         } else {
             SaveResultModel(false, null, "saveFileToGallery fail").toHashMap()
         }
