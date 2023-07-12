@@ -122,7 +122,7 @@ class ImageGallerySaverPlugin : FlutterPlugin, MethodCallHandler {
         }
         val uri = contentUri.toString()
         val split = uri.split(":")
-        val id = split[1].split("/")[1]
+        val id = split[1].split("/").last()
 
         val column = MediaStore.Images.Media.DATA
         val projection = arrayOf(column)
