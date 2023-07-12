@@ -1,22 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'dialog.dart';
 
 class Utils {
   static void toast(String msg) {
-    Fluttertoast.showToast(
-      msg: msg,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-      textColor: Colors.white,
-      fontSize: 16.0,
-      backgroundColor: Colors.black,
-    );
+    // Fluttertoast.showToast(
+    //   msg: msg,
+    //   toastLength: Toast.LENGTH_SHORT,
+    //   gravity: ToastGravity.CENTER,
+    //   timeInSecForIosWeb: 1,
+    //   textColor: Colors.white,
+    //   fontSize: 16.0,
+    //   backgroundColor: Colors.black,
+    // );
   }
 }
 
